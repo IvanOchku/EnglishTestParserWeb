@@ -1,11 +1,8 @@
 import requests
 from bs4 import BeautifulSoup
 
-import ParcerNoun
-import ParserVerb
-
-URL_VERB = 'https://elenaruvel.com/150-vazhnyh-anglijskih-glagolov-s-ozvuchkoj/'
-URL_NOUN = 'https://elenaruvel.com/150-populyarnyh-anglijskih-sushhestvitelnyh-s-ozvuchkoj/'
+from ParserDict import ParserNoun
+from ParserDict import ParserVerb
 
 
 class Parser:
@@ -21,10 +18,16 @@ class Parser:
 
     def get_dict(self):
         table = self.get_table()
+        english_verb = []
+        russian_verb = []
 
         if 'glagolov' in self.url:
             english_verb = ParserVerb.get_english_verb(table)
             russian_verb = ParserVerb.get_russian_verb(table)
+
+        if 'sushhestvitelnyh' in self.url:
+            english_verb = ParserNoun.get_english_noun(table)
+            russian_verb = ParserNoun.get_russian_noun(table)
 
         for i in range(len(english_verb)):
             self.dictionary[english_verb[i].text.lstrip()] = russian_verb[i].text.lstrip()
@@ -32,5 +35,9 @@ class Parser:
         return self.dictionary
 
 
-print(Parser(URL_NOUN).get_dict())
+if __name__ == '__main__':
+    URL_VERB = 'https://elenaruvel.com/150-vazhnyh-anglijskih-glagolov-s-ozvuchkoj/'
+    URL_NOUN = 'https://elenaruvel.com/150-populyarnyh-anglijskih-sushhestvitelnyh-s-ozvuchkoj/'
 
+    print(Parser(URL_VERB).get_dict())
+    print(Parser(URL_NOUN).get_dict())
