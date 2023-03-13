@@ -1,6 +1,7 @@
 from random import randint
 
 import ParserDict
+import BrokenDict
 
 URL_VERB = 'https://elenaruvel.com/150-vazhnyh-anglijskih-glagolov-s-ozvuchkoj/'
 URL_NOUN = 'https://elenaruvel.com/150-populyarnyh-anglijskih-sushhestvitelnyh-s-ozvuchkoj/'
@@ -26,7 +27,7 @@ class EnglishTest:
 
     def check_answer(self, key: str, ans: str):
         correct_answers = self.dictionary_copy[key]
-        if ans == correct_answers or set(ans.split(', ')) < set(correct_answers.split(', ')):
+        if ans == correct_answers or set(ans.split(', ')).issubset(set(correct_answers.split(', '))):
             return True
         return False
 
@@ -54,7 +55,12 @@ class EnglishTest:
     def test_start(self):
         while True:
             try:
-                self.amount_words = int(input(f'Choose number words between 1 and {self.amount_words}: '))
+                area_words = input(f'Choose number words from 0 to {self.amount_words} through the colon without spaces. Example: "0:20": ')
+                start_index, end_index = area_words.split(':')
+                if not start_index.isdigit() or not end_index.isdigit() or int(end_index) > self.amount_words:
+                    continue
+                self.dictionary_copy = BrokenDict.broken_dict(int(start_index), int(end_index), self.dictionary)
+                self.amount_words = int(end_index) - 1
             except ValueError:
                 continue
             else:
