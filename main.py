@@ -82,4 +82,4 @@ class EnglishTest:
             self.remove_key(key)
 
 
-EnglishTest(ParserDict.Parser(URL_VERB).get_dict()).test_start()
+EnglishTest(ParserDict.Parser(URL_NOUN).get_dict()).test_start()
